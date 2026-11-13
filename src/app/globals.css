@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-canvas: #F7F6F2;
+  --bg-surface: #FFFFFF;
+  --text-ink: #0D0D0D;
+  --text-ash: #5A5A55;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-canvas);
+  color: var(--text-ink);
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-ink);
+  font-feature-settings: "ss01", "ss02", "cv01";
+  overflow-x: hidden;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: inline-flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Custom Streetwear Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7F6F2;
+  border-left: 1px solid #0D0D0D;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0D0D0D;
+}
