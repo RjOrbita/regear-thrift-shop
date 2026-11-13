@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
+import ShopMapSection from "@/components/ShopMapSection";
 import {
   PRODUCT_CATEGORIES,
   PRODUCT_SIZES,
@@ -284,7 +285,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. Clean Footer (with Hidden 3-Tap Admin Trigger on the Logo) */}
+      {/* 5. Physical Shop Location & Interactive Directions Map */}
+      <ShopMapSection />
+
+      {/* 6. Clean Footer (with Hidden 3-Tap Admin Trigger on the Logo) */}
       <footer className="max-w-[1440px] mx-auto border-x border-b border-ink bg-canvas px-5 sm:px-6 py-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">

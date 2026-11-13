@@ -69,6 +69,12 @@ export default function Navbar() {
           >
             How To Claim
           </Link>
+          <Link
+            href="/#shop-map"
+            className="text-ash hover:text-ink transition-colors"
+          >
+            Shop Map
+          </Link>
           <a
             href={FB_PROFILE_URL}
             target="_blank"
