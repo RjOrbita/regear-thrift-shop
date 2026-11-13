@@ -4,7 +4,7 @@
   <img src="public/logo.jpg" alt="ReGear Thrift Shop Logo" width="320" />
 </p>
 
-**ReGear Thrift Shop** is a mobile-first, 1-of-1 streetwear and vintage apparel e-commerce web application built with **Next.js (App Router)**, **React**, **TypeScript**, **Tailwind CSS**, and **Supabase**.
+**ReGear Thrift Shop** is a mobile-first, 1-of-1 streetwear and vintage apparel e-commerce web application built with **Next.js (App Router)**, **React**, **TypeScript**, **Tailwind CSS**, **Leaflet**, and **Supabase**.
 
 Inspired by the editorial underground aesthetic of [Nightkidz](https://www.nightkidz.shop/us) and structured around the visual and conversion guardrails of [`elayadesign/ai-design-skills`](https://github.com/elayadesign/ai-design-skills).
 
@@ -21,6 +21,9 @@ Inspired by the editorial underground aesthetic of [Nightkidz](https://www.night
 - **1-of-1 Bag & Direct Facebook Messenger Checkout:**
   - Shoppers can claim a single item or combine multiple 1-of-1 pieces in their Bag.
   - Clicking **Checkout via Facebook Messenger** generates an itemized PHP (`₱`) order receipt with a unique reference code (`#RG-XXXX`), automatically copies it to the clipboard, and opens ReGear's Facebook Messenger / Profile so the buyer can paste and claim immediately.
+- **Interactive Physical Shop Map & Live Route Directions:**
+  - Embedded **Leaflet + OpenStreetMap** locator pinned to ReGear Thrift Shop's physical location (`6.960294, 125.088712`).
+  - Visitors can type any starting street, barangay, landmark, city, or coordinates—or tap **Use My Current GPS**—to calculate a live driving/riding route via **OSRM**, complete with on-map route polyline, total distance (`km`), estimated travel time (`mins`), turn-by-turn street instructions, and a 1-tap **Open in Google Maps** shortcut.
 - **Hidden & Hardened Admin Backroom (`/admin`):**
   - No visible Admin links on the public storefront (accessible via a hidden triple-tap on the footer ReGear logo, pressing `Shift + Alt + A` on desktop, or navigating to `/admin`).
   - Protected by **Supabase Auth (JWT)** + **PostgreSQL Row-Level Security (RLS)** so only verified admin accounts (`app_metadata.role = "regear_admin"`) can create, update, or delete inventory and upload multi-angle garment photos to Supabase Storage.
@@ -34,6 +37,7 @@ Inspired by the editorial underground aesthetic of [Nightkidz](https://www.night
 | **Framework** | Next.js 15 (App Router) + React 19 |
 | **Language** | TypeScript |
 | **Styling** | Tailwind CSS (`Syne`, `Plus Jakarta Sans`, `JetBrains Mono`) |
+| **Maps & Routing** | Leaflet + OpenStreetMap Nominatim Geocoding + OSRM Routing API |
 | **Database & Auth** | Supabase (PostgreSQL, Row-Level Security, Supabase Auth) |
 | **File Storage** | Supabase Storage (`product-images` public bucket with admin-only write policies) |
 | **Icons** | `lucide-react` |
@@ -90,7 +94,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 - **Row-Level Security (RLS):** Anonymous visitors (`anon`) have `SELECT`-only access on `public.products` and `storage.objects`. All write operations (`INSERT`, `UPDATE`, `DELETE`) require an authenticated JWT carrying `app_metadata.role = "regear_admin"`.
 - **Zero Client-Side Secrets:** Admin authentication is verified server-side by Supabase Auth (`bcrypt`), with zero passwords stored in `NEXT_PUBLIC_` environment variables.
-- **HTTP Security Headers:** Configured in [`next.config.ts`](next.config.ts) with `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, and `Permissions-Policy`.
+- **HTTP Security Headers:** Configured in [`next.config.ts`](next.config.ts) with `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, and `Permissions-Policy: camera=(), microphone=(), geolocation=(self)`.
 
 ---
 
@@ -107,14 +111,15 @@ regear-thrift-shop/
 │   │   ├── admin/page.tsx        # Staff login & 1-click inventory/status manager
 │   │   ├── globals.css           # Tokens, marquee keyframes & custom scrollbar
 │   │   ├── layout.tsx            # Root layout + fonts + RollUpDoorLoader
-│   │   └── page.tsx              # Main storefront, filters & mobile bag bar
+│   │   └── page.tsx              # Main storefront, filters, map & mobile bag bar
 │   ├── components/
 │   │   ├── CartDrawer.tsx        # Slide-out 1-of-1 bag & Facebook checkout modal
 │   │   ├── Hero.tsx              # Above-the-fold editorial hero & spotlight card
 │   │   ├── Navbar.tsx            # Marquee ticker & sticky navigation bar
 │   │   ├── ProductCard.tsx       # 2-col mobile / 4-col desktop card with hover flip
 │   │   ├── ProductModal.tsx      # Multi-angle photo inspector & flaw disclosure
-│   │   └── RollUpDoorLoader.tsx  # Corrugated steel roll-up shutter entrance
+│   │   ├── RollUpDoorLoader.tsx  # Corrugated steel roll-up shutter entrance
+│   │   └── ShopMapSection.tsx    # Interactive physical shop map & live directions
 │   ├── context/
 │   │   └── ShopContext.tsx       # Catalog filters, bag state & FB receipt formatter
 │   ├── lib/
